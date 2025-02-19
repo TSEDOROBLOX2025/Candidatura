@@ -1,0 +1,95 @@
+<!DOCTYPE html><html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Candidaturas</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #e0f7fa;
+            color: #004d40;
+            text-align: center;
+        }
+        .container {
+            max-width: 600px;
+            margin: 20px auto;
+            padding: 20px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        select, input, button {
+            width: 100%;
+            margin: 10px 0;
+            padding: 10px;
+            border: 1px solid #004d40;
+            border-radius: 5px;
+        }
+        .candidatos {
+            margin-top: 20px;
+            text-align: left;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Formulário de Candidatura</h1>
+        <input type="text" id="nome" placeholder="Nome completo" required>
+        <select id="lado">
+            <option value="direita">Direita</option>
+            <option value="esquerda">Esquerda</option>
+            <option value="centro">Centro</option>
+        </select>
+        <select id="partido">
+            <option value="PL">PL</option>
+            <option value="Republicanos">Republicanos</option>
+            <option value="PP">PP</option>
+            <option value="PSC">PSC</option>
+        </select>
+        <select id="cargo">
+            <option value="presidente">Presidente</option>
+            <option value="governador">Governador</option>
+            <option value="senador">Senador</option>
+            <option value="deputado_federal">Deputado Federal</option>
+            <option value="deputado_estadual">Deputado Estadual</option>
+        </select>
+        <button onclick="cadastrar()">Enviar</button>
+    </div><div class="container candidatos">
+    <h2>Candidatos</h2>
+    <ul id="listaCandidatos"></ul>
+</div>
+
+<script>
+    let candidatos = [];
+    const limites = { presidente: 1, governador: 1, senador: 3, deputado_federal: 3, deputado_estadual: 3 };
+    
+    function cadastrar() {
+        let nome = document.getElementById("nome").value;
+        let lado = document.getElementById("lado").value;
+        let partido = document.getElementById("partido").value;
+        let cargo = document.getElementById("cargo").value;
+        
+        let count = candidatos.filter(c => c.cargo === cargo && c.partido === partido).length;
+        if (count >= limites[cargo]) {
+            alert("Esse cargo já atingiu o limite para este partido.");
+            return;
+        }
+        
+        let candidato = { nome, lado, partido, cargo };
+        candidatos.push(candidato);
+        atualizarLista();
+    }
+    
+    function atualizarLista() {
+        let lista = document.getElementById("listaCandidatos");
+        lista.innerHTML = "";
+        candidatos.forEach(c => {
+            let item = document.createElement("li");
+            item.textContent = `${c.nome} - ${c.partido} (${c.lado}) - ${c.cargo}`;
+            lista.appendChild(item);
+        });
+    }
+</script>
+
+</body>
+</html>
